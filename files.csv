@@ -1,0 +1,36 @@
+--first file
+
+system_name,source_type,source_role
+CRM System,Customer Management,primary
+ERP System,Enterprise Resource Planning,primary
+HR System,Human Resources,secondary
+Financial System,Financial Management,primary
+Nexus Data Warehouse,Data Warehouse,central
+Marketing Analytics,Marketing Intelligence,secondary
+Supply Chain System,Logistics,primary
+
+--second file
+
+source_system,target_system,flow_weight,flow_direction
+CRM System,Nexus Data Warehouse,85,Unidirectional
+ERP System,Nexus Data Warehouse,95,Unidirectional
+HR System,Nexus Data Warehouse,60,Unidirectional
+Financial System,Nexus Data Warehouse,90,Unidirectional
+Marketing Analytics,Nexus Data Warehouse,75,Unidirectional
+Supply Chain System,Nexus Data Warehouse,80,Unidirectional
+Nexus Data Warehouse,CRM System,40,Bidirectional
+Nexus Data Warehouse,ERP System,45,Bidirectional
+
+--third file
+
+source_system,target_system,source_table,target_table,table_flow_weight,transformation,flow_direction
+CRM System,Nexus Data Warehouse,customers,dim_customers,75,Aggregation,Unidirectional
+CRM System,Nexus Data Warehouse,sales_records,fact_sales,85,Cleaning,Unidirectional
+ERP System,Nexus Data Warehouse,product_inventory,dim_products,90,Enrichment,Unidirectional
+ERP System,Nexus Data Warehouse,financial_transactions,fact_financials,95,Cleansing,Unidirectional
+HR System,Nexus Data Warehouse,employee_data,dim_employees,60,Anonymization,Unidirectional
+Financial System,Nexus Data Warehouse,financial_reports,fact_financial_reports,88,Summarization,Unidirectional
+Marketing Analytics,Nexus Data Warehouse,campaign_data,dim_marketing,70,Segmentation,Unidirectional
+Supply Chain System,Nexus Data Warehouse,logistics_data,fact_logistics,80,Standardization,Unidirectional
+Nexus Data Warehouse,CRM System,dim_customers,customer_enriched,40,Filtering,Bidirectional
+Nexus Data Warehouse,ERP System,fact_sales,sales_prediction,45,Machine Learning,Bidirectional
