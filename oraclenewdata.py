@@ -2,7 +2,9 @@ import oracledb
 from dotenv import load_dotenv
 import os
 import json
+import base64
 from datetime import datetime
+from decimal import Decimal
 
 # Load environment variables
 load_dotenv("config/.env")
@@ -21,11 +23,21 @@ except oracledb.DatabaseError as e:
     print(f"❌ Connection failed: {e}")
     exit(1)
 
-# Function to convert datetime objects to string
+# Function to convert non-serializable data types
 def serialize_data(value):
+    """Handles serialization of datetime, LOB, decimal, and other types"""
     if isinstance(value, datetime):
         return value.strftime("%Y-%m-%d %H:%M:%S")  # Convert datetime to string
-    return value
+    elif isinstance(value, Decimal):
+        return float(value)  # Convert Decimal to float
+    elif isinstance(value, oracledb.LOB):
+        lob_value = value.read()  # Read LOB content
+        if isinstance(lob_value, bytes):  # Handle BLOB (binary)
+            return base64.b64encode(lob_value).decode("utf-8")  # Convert to Base64 string
+        return lob_value  # Handle CLOB (text)
+    elif value is None:
+        return None  # Convert NULL to None (JSON compatible)
+    return value  # Return other data types as-is
 
 # Function to fetch DDL
 def get_table_ddl(table_name):
@@ -36,13 +48,16 @@ def get_table_ddl(table_name):
         print(f"⚠️ Error fetching DDL for {table_name}: {e}")
         return None
 
-# Function to fetch sample data (handling datetime fields)
+# Function to fetch sample data with type handling
 def get_sample_data(table_name):
     try:
         cursor.execute(f"SELECT * FROM {table_name} FETCH FIRST 10 ROWS ONLY")
         columns = [desc[0] for desc in cursor.description]
         rows = cursor.fetchall()
+        
+        # Apply `serialize_data` for each value
         return [dict(zip(columns, [serialize_data(value) for value in row])) for row in rows]
+
     except oracledb.DatabaseError as e:
         print(f"⚠️ Error fetching sample data for {table_name}: {e}")
         return []
@@ -69,31 +84,37 @@ except oracledb.DatabaseError as e:
     print(f"❌ Error fetching table list: {e}")
     exit(1)
 
-# Generate data for all tables
-data = {}
-for table in tables:
-    table_name = table.upper()  # Ensure uppercase table names
+# JSON file path
+json_file_path = "oracle_schema_data.json"
 
-    print(f"📌 Processing table: {table_name}")
-    table_data = {
-        "DDL": get_table_ddl(table_name),
-        "Sample Data": get_sample_data(table_name),
-        "Constraints": get_table_constraints(table_name),
-    }
+# Start writing JSON file incrementally
+with open(json_file_path, "w") as f:
+    f.write("{\n")  # Start JSON object
+    for index, table in enumerate(tables):
+        table_name = table.upper()  # Ensure uppercase table names
+        print(f"📌 Processing table: {table_name}")
 
-    # Only include non-empty tables
-    if any(table_data.values()):
-        data[table_name] = table_data
-    else:
-        print(f"⚠️ Skipping {table_name}: No data retrieved.")
+        table_data = {
+            "DDL": get_table_ddl(table_name),
+            "Sample Data": get_sample_data(table_name),
+            "Constraints": get_table_constraints(table_name),
+        }
 
-# Save JSON file with datetime conversion
-try:
-    with open("oracle_schema_data.json", "w") as f:
-        json.dump(data, f, indent=4)
-    print("✅ Schema data extracted and saved successfully!")
-except Exception as e:
-    print(f"❌ Error saving JSON file: {e}")
+        # Skip empty tables
+        if not any(table_data.values()):
+            print(f"⚠️ Skipping {table_name}: No data retrieved.")
+            continue
+
+        # Write JSON data for this table
+        json.dump({table_name: table_data}, f, indent=4)
+
+        # Add a comma unless it's the last table
+        if index < len(tables) - 1:
+            f.write(",\n")
+
+    f.write("\n}")  # End JSON object
+
+print("✅ Schema data extracted and saved successfully!")
 
 # Close the connection
 cursor.close()
