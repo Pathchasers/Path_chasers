@@ -1,0 +1,338 @@
+Create a production-quality Executive Overview page for a PCI Data Flow Intelligence Platform.
+
+Purpose:
+The platform helps enterprise architects, PCI compliance teams, cybersecurity teams, and application owners understand how PCI cardholder data (PAN) propagates across systems, identify influential systems, prioritize tokenization efforts, and quantify PCI scope reduction opportunities.
+
+The page should be optimized for decision-making, not just reporting.
+
+=====================================================
+SECTION 1: EXECUTIVE KPI SUMMARY
+=====================================================
+
+Display high-level KPI cards at the top.
+
+Metrics:
+
+1. Total Systems
+   Description:
+   Total applications present in the dependency graph.
+
+2. PCI In-Scope Systems
+   Description:
+   Number of systems currently receiving, storing, processing, or transmitting PAN.
+
+3. PAN Carrying Connections
+   Description:
+   Number of system-to-system integrations carrying PAN.
+
+4. Primary PAN Sources
+   Description:
+   Systems identified as original sources of PAN.
+
+5. Average Downstream Reach
+   Description:
+   Average number of systems impacted by a PAN source.
+
+6. Current PCI Risk Score
+   Description:
+   Enterprise-wide PCI exposure score.
+
+7. Potential Risk Reduction
+   Description:
+   Estimated percentage reduction if recommended tokenization candidates are implemented.
+
+Each KPI should include:
+- value
+- trend indicator
+- tooltip explanation
+
+=====================================================
+SECTION 2: PCI DATA FLOW GRAPH
+=====================================================
+
+Display a large interactive graph.
+
+Node Types:
+
+Red:
+PAN Source Systems
+
+Orange:
+PCI In Scope Systems
+
+Green:
+Out of Scope Systems
+
+Blue:
+External Systems
+
+Edge Types:
+
+Solid Line:
+Authoritative Relationship (BAM)
+
+Dashed Line:
+Inferred Relationship
+
+Flow Indicators:
+
+Red Arrows:
+PAN Flow
+
+Green Arrows:
+CRN / Token Flow
+
+Graph Capabilities:
+
+- zoom
+- pan
+- search
+- filter
+- node selection
+- path highlighting
+
+When a node is clicked:
+
+Display:
+- system name
+- business owner
+- technology owner
+- PCI status
+- risk score
+- upstream count
+- downstream count
+- PAN exposure count
+
+=====================================================
+SECTION 3: TOP INFLUENTIAL PCI SYSTEMS
+=====================================================
+
+Display ranked table.
+
+Columns:
+
+System Name
+PCI Reach
+Downstream Reach
+Risk Score
+Tokenization Impact Score
+Business Criticality
+
+Definitions:
+
+PCI Reach:
+Number of PCI systems depending on this node.
+
+Downstream Reach:
+Number of descendant systems.
+
+Tokenization Impact Score:
+Estimated systems removed from PCI scope if tokenization occurs here.
+
+Highlight Top 10.
+
+=====================================================
+SECTION 4: PCI RISK DISTRIBUTION
+=====================================================
+
+Display donut chart.
+
+Risk Categories:
+
+Critical (8-10)
+High (6-8)
+Medium (3-6)
+Low (0-3)
+
+Show:
+
+- count
+- percentage
+
+=====================================================
+SECTION 5: TOKENIZATION IMPACT SUMMARY
+=====================================================
+
+Display simulation summary.
+
+Current State:
+
+PCI Systems
+PCI Connections
+PCI Surface Area
+
+Future State:
+
+PCI Systems
+PCI Connections
+PCI Surface Area
+
+Display:
+
+Reduction %
+Systems Removed
+Connections Removed
+
+PCI Surface Area Formula:
+
+Surface Area =
+PCI Nodes +
+PCI Edges
+
+=====================================================
+SECTION 6: CLEAN STREAM EFFECT ANALYSIS
+=====================================================
+
+Purpose:
+Demonstrate how tokenizing PAN at true source systems reduces downstream PCI scope.
+
+Show:
+
+Recommended Source Systems
+
+For each source:
+
+- downstream systems affected
+- PCI systems removed
+- risk reduction %
+- effort estimate
+
+Display before/after visual comparison.
+
+=====================================================
+SECTION 7: PCI SOURCE LEADERBOARD
+=====================================================
+
+Display ranking.
+
+Columns:
+
+Source System
+Total Reach
+PCI Reach
+Critical Paths
+Risk Contribution
+
+Purpose:
+Identify systems responsible for the largest PAN propagation footprint.
+
+=====================================================
+SECTION 8: PCI BLAST RADIUS ANALYSIS
+=====================================================
+
+Display top systems ranked by:
+
+Impacted Systems
+Impacted PCI Systems
+Impacted Business Domains
+
+Purpose:
+Measure enterprise impact if the system changes or is compromised.
+
+=====================================================
+SECTION 9: LONGEST PAN PROPAGATION PATHS
+=====================================================
+
+Display:
+
+Top PAN propagation chains.
+
+Example:
+
+Payment Gateway
+→ Authorization Service
+→ Customer Service App
+→ Reporting DB
+→ Data Warehouse
+→ Analytics Platform
+
+Metrics:
+
+Path Length
+PCI Systems Traversed
+Business Domains Traversed
+
+Purpose:
+Identify deep PCI dependency chains.
+
+=====================================================
+SECTION 10: DATA QUALITY INSIGHTS
+=====================================================
+
+Display:
+
+Authoritative Relationships
+Inferred Relationships
+Potential Missing Relationships
+Conflicting Metadata
+Survey/BAM Mismatches
+
+Purpose:
+Highlight uncertainty in the PCI map.
+
+=====================================================
+SECTION 11: AI INSIGHTS PANEL
+=====================================================
+
+Generate executive observations.
+
+Examples:
+
+"Payment Gateway contributes to 34% of enterprise PCI exposure."
+
+"Tokenizing Authorization Service could remove 41 systems from PCI scope."
+
+"Three systems account for 62% of PAN propagation."
+
+"Reporting Platform receives PAN despite no documented business need."
+
+=====================================================
+SECTION 12: RECOMMENDED ACTIONS
+=====================================================
+
+Generate prioritized recommendations.
+
+Rank by:
+
+Risk Reduction Potential
+Implementation Effort
+Business Impact
+
+Example:
+
+1. Tokenize Payment Gateway
+   Risk Reduction: 62%
+
+2. Tokenize Authorization Service
+   Risk Reduction: 29%
+
+3. Remove PAN from Reporting DB
+   Risk Reduction: 12%
+
+=====================================================
+DESIGN REQUIREMENTS
+=====================================================
+
+Use enterprise-grade dashboard design.
+
+Layout should resemble:
+
+- Cybersecurity command center
+- Data lineage platform
+- Enterprise architecture intelligence dashboard
+
+Emphasize:
+- PCI scope visibility
+- Explainability
+- Influence analysis
+- Tokenization prioritization
+- Clean stream effect
+
+This page should immediately answer:
+
+1. Where is PAN flowing?
+2. Which systems drive PCI exposure?
+3. Which systems should be tokenized first?
+4. What reduction will be achieved?
+5. What is the current PCI surface area?
+6. What is the future PCI surface area?
